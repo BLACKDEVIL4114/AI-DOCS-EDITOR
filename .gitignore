@@ -24,3 +24,16 @@ dist-ssr
 *.sw?
 .vite-source-tags.js
 .vercel
+
+# Environment variables - NEVER commit these!
+.env
+.env.local
+.env.production
+.env.*
+
+# Debug logs
+ai_debug_log.txt
+*.debug.log
+
+# Sample/test files
+sample.docx

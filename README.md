@@ -1,73 +1,110 @@
-# React + TypeScript + Vite
+# AI DOCX Editor 🤖📄
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An AI-powered DOCX editor that lets you edit Word documents using **natural language instructions** — no manual editing needed!
 
-Currently, two official plugins are available:
+Built with **React + TypeScript + Vite** on the frontend and **Node.js + Express** on the backend, powered by **Ollama (Qwen 2.5 14B)** running locally.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## ✨ Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- 📝 **Natural language editing** — type instructions like `replace Himanshu with Henil`
+- ⚡ **Batch mode** — run multiple instructions at once
+- ↩️ **Undo / Redo** — up to 20 steps
+- 📜 **Instruction history** — see all past edits, restore any version
+- 👁️ **Change preview** — see which files changed before downloading
+- 🖱️ **Drag & Drop** — drop any DOCX file directly onto the app
+- 🔍 **XML viewer** — inspect every XML file inside your DOCX
+- 💾 **Download** — get your edited DOCX instantly
+- 🌙 **Dark UI** — clean, modern dark theme
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🚀 Getting Started
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Prerequisites
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- [Node.js](https://nodejs.org/) v18+
+- [Ollama](https://ollama.com/) installed locally
+- Qwen 2.5 14B model
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 1. Install Ollama & Pull Model
+
+```bash
+ollama pull qwen2.5:14b
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Clone & Install
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+git clone https://github.com/BLACKDEVIL4114/AI-DOCS-EDITOR.git
+cd AI-DOCS-EDITOR
+npm install
 ```
+
+### 3. Run the App
+
+**Window 1 — API server:**
+```bash
+node dev-server.js
+```
+
+**Window 2 — Frontend:**
+```bash
+npm run dev
+```
+
+Open **http://localhost:5173** 🚀
+
+---
+
+## 💡 Example Instructions
+
+| Instruction | What it does |
+|-------------|-------------|
+| `replace Himanshu Kotval with Henil Patel` | Replaces name everywhere |
+| `replace 221130116024 with 221130116048` | Replaces enrollment number |
+| `replace SUMMER-2025 with SUMMER-2026` | Updates year |
+| `fix grammar in abstract` | AI fixes grammar |
+| `make the abstract more professional` | AI rewrites text |
+
+**Batch mode:**
+```
+replace Himanshu Kotval with Henil Patel
+replace 221130116024 with 221130116048
+replace SUMMER-2025 with SUMMER-2026
+```
+
+---
+
+## 🏗️ Project Structure
+
+```
+├── api/
+│   └── claude.js        # Backend AI logic
+├── src/
+│   └── App.tsx          # React frontend
+├── dev-server.js        # Express API server
+└── package.json
+```
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend:** React, TypeScript, Vite
+- **Backend:** Node.js, Express
+- **AI:** Ollama (Qwen 2.5 14B) — 100% local, offline
+- **DOCX:** JSZip
+
+---
+
+## 📌 Privacy
+
+This app runs **completely offline** — your documents never leave your computer.
+
+---
+
+## 👨‍💻 Author
+
+**Himanshu Kotval** — [GitHub](https://github.com/BLACKDEVIL4114)

@@ -114,6 +114,31 @@ export default async function handler(req, res) {
       return res.status(200).json({ content: [{ type: 'text', text: JSON.stringify(result) }] });
     }
 
+    // ============================================================
+    // FIX: Handle split XML runs (e.g. enrollment numbers like 221130116024
+    // stored as separate <w:t> tags: <w:t>221130</w:t><w:t>116024</w:t>)
+    // Merge all <w:t> text in each <w:r> run block and search across them
+    // ============================================================
+    console.log(`[Direct] Trying split-run fix for "${fromText}"...`);
+    const splitChanges = [];
+
+    for (const match of fileMatches) {
+      const fileName = match[1];
+      const content = match[2].trim();
+      const originalPath = `word/${fileName}`;
+
+      // Extract all text from <w:t> tags joined together per paragraph
+      const mergedText = content.replace(/<\/w:t>[\s\S]*?<w:t[^>]*>/g, '');
+      const lowerMerged = mergedText.toLowerCase();
+      const lowerFrom = fromText.toLowerCase();
+
+      if (lowerMerged.includes(lowerFrom) || mergedText.includes(fromText)) {
+        // Use Ollama to fix this split run case
+        console.log(`[SplitRun] Found "${fromText}" across split runs in ${fileName}, sending to Ollama...`);
+        break;
+      }
+    }
+
     console.log(`[Direct] "${fromText}" not found in any XML file, falling to Ollama...`);
   }
 
@@ -146,21 +171,28 @@ export default async function handler(req, res) {
     }
   }
 
-  const systemPrompt = `You are a DOCX XML editor. Edit Microsoft Word XML based on user instructions.
-Return ONLY valid JSON, no explanation, no markdown.
+  const systemPrompt = `You are an expert DOCX XML editor for Microsoft Word files.
 
-FORMAT:
+CRITICAL RULES:
+1. Return ONLY valid JSON — no explanation, no markdown, no code blocks
+2. Numbers like enrollment numbers are often SPLIT across multiple XML runs like:
+   <w:t>2211</w:t></w:r><w:r><w:t>30116024</w:t>
+   You MUST find and replace the FULL split sequence across all runs
+3. Always preserve XML structure and formatting attributes
+4. If text not found, return empty changes array
+
+RESPONSE FORMAT (JSON only, no markdown):
 {
   "changes": [
     {
       "file_name": "document.xml",
       "original_path": "word/document.xml",
       "patches": [
-        { "search": "<exact original xml>", "replace": "<new xml>" }
+        { "search": "<exact original xml snippet>", "replace": "<new xml snippet>" }
       ]
     }
   ],
-  "summary": "what changed"
+  "summary": "brief description of what changed"
 }`;
 
   const condensedPrompt = `TASK: ${task}
